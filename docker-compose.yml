@@ -1,0 +1,64 @@
+version: "3.9"
+
+services:
+
+  # ── Ollama — local LLM server ─────────────────────────────────────────────
+  ollama:
+    image: ollama/ollama:latest
+    container_name: shopsense_ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama   # persists downloaded models across restarts
+    restart: unless-stopped
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+#      interval: 30s
+#      timeout: 20s
+#      retries: 10
+#      start_period: 60s
+
+  # ── FastAPI backend ───────────────────────────────────────────────────────
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: shopsense_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./knowledge_base:/app/knowledge_base   # mount KB so re-ingest works live
+      - ./chroma_store:/app/chroma_store       # persist ChromaDB vectors
+      - ./logs:/app/logs                       # persist SQLite logs
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434    # talk to ollama service, not localhost
+      - OLLAMA_MODEL=qwen2.5-coder:1.5b
+    depends_on:
+      - ollama
+ #       condition: service_healthy
+    restart: unless-stopped
+ #   healthcheck:
+ #     test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+ #     interval: 30s
+ #     timeout: 10s
+ #     retries: 5
+ #     start_period: 30s
+
+  # ── Streamlit frontend ────────────────────────────────────────────────────
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: shopsense_frontend
+    ports:
+      - "8501:8501"
+    environment:
+      - API_BASE_URL=http://backend:8000      # talk to backend service, not localhost
+    depends_on:
+      - backend
+#        condition: service_healthy
+    restart: unless-stopped
+
+# ── Named volumes ─────────────────────────────────────────────────────────
+volumes:
+  ollama_data:

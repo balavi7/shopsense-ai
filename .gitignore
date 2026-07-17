@@ -1,0 +1,31 @@
+# Virtual environment
+shopai/
+venv/
+.venv/
+env/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# ChromaDB
+chroma_store/
+
+# Logs and DB
+logs/
+*.db
+
+# Terraform
+infra/terraform.tfvars
+infra/.terraform/
+infra/*.tfstate
+infra/*.tfstate.backup
+infra/crash.log
+
+# Environment
+.env
+*.pem
+
+# OS
+.DS_Store
