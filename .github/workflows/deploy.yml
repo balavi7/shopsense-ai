@@ -14,5 +14,9 @@ jobs:
 
       # ── 1. Checkout code ─────────────────────────────────────────────────
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
+      # ── 2. Setup SSH ──────────────────────────────────────────────────────
+      - name: Configure SSH
+        run: |
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/home/ubuntu/.ssh/shopsense.pem
