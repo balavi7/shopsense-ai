@@ -18,7 +18,20 @@ jobs:
 
       - name: Configure SSH
         run: |
+
           mkdir -p ~/.ssh
+
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/shopsense.pem
+
+          echo "Checking private key file..."
+          ls -la ~/.ssh/shopsense.pem
+
           chmod 600 ~/.ssh/shopsense.pem
-          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+
+          echo "Testing SSH port..."
+          timeout 10 bash -c "</dev/tcp/${{ secrets.EC2_HOST }}/22"
+
+          echo "Running ssh-keyscan..."
+          ssh-keyscan -v -H "${{ secrets.EC2_HOST }}" >> ~/.ssh/known_hosts
+
+          echo "SSH setup completed"
