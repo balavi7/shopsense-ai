@@ -28,7 +28,7 @@ jobs:
           echo "Checking private key file..."
           ls -la ~/.ssh/shopsense.pem
 
-          sudo chmod 600 ~/.ssh/shopsense.pem
+          chmod 600 ~/.ssh/shopsense.pem
 
           echo "Testing SSH port..."
           timeout 10 bash -c "</dev/tcp/${{ secrets.EC2_HOST }}/22"
@@ -38,15 +38,3 @@ jobs:
 
           echo "SSH setup completed"
 
-      # ── 3. Copy files to EC2 ──────────────────────────────────────────────
-      - name: Copy project files to EC2
-        run: |
-          rsync -avz --delete \
-            --exclude='.git' \
-            --exclude='chroma_store/' \
-            --exclude='logs/' \
-            --exclude='*.db' \
-            --exclude='.env' \
-            --exclude='infra/' \
-            -e "ssh -i ~/.ssh/shopsense.pem" \
-            ./ ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/ubuntu/shopsense-ai/ 
