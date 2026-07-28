@@ -28,7 +28,7 @@ jobs:
           echo "Checking private key file..."
           ls -la ~/.ssh/shopsense.pem
 
-          chmod 600 ~/.ssh/shopsense.pem
+          sudo chmod 600 ~/.ssh/shopsense.pem
 
           echo "Testing SSH port..."
           timeout 10 bash -c "</dev/tcp/${{ secrets.EC2_HOST }}/22"
