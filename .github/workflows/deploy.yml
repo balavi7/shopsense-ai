@@ -30,11 +30,8 @@ jobs:
 
           chmod 600 ~/.ssh/shopsense.pem
 
-          echo "Testing SSH port..."
-          timeout 10 bash -c "</dev/tcp/${{ secrets.EC2_HOST }}/22"
-
           echo "Running ssh-keyscan..."
-          ssh-keyscan -v -H "${{ secrets.EC2_HOST }}" >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
           echo "SSH setup completed"
 
