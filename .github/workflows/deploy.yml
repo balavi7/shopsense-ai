@@ -30,7 +30,7 @@ jobs:
 
           chmod 600 ~/.ssh/shopsense.pem
 
-          echo "Running ssh-keyscan..."
+          echo "Running ssh-keyscan.."
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
           echo "SSH setup completed"
