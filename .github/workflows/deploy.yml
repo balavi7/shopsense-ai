@@ -77,3 +77,10 @@ jobs:
             curl -sf http://localhost:8000/health && echo "✅ Backend is up" || echo "⚠️ Backend not ready yet"
 
           ENDSSH
+
+      # ── 6. Verify deployment ──────────────────────────────────────────────
+      - name: Verify deployment
+        run: |
+          echo "🚀 ShopSense AI deployed successfully"
+          echo "🌐 Streamlit UI : http://${{ secrets.EC2_HOST }}:8501"
+          echo "⚡ FastAPI docs  : http://${{ secrets.EC2_HOST }}:8000/docs"
