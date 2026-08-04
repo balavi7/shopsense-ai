@@ -48,3 +48,30 @@ jobs:
             --exclude='infra/' \
             -e "ssh -i ~/.ssh/shopsense.pem" \
             ./ ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/ubuntu/shopsense-ai/
+
+
+      # ── 4. Deploy on EC2 ──────────────────────────────────────────────────
+      - name: Deploy with Docker Compose
+        run: |
+          ssh -i ~/.ssh/shopsense.pem \
+              ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'ENDSSH'
+
+            set -e
+            cd /home/ubuntu/shopsense-ai
+
+            echo " Verifying the files..."
+            ls
+
+            echo "🔨 Building and starting containers..."
+            docker compose up --build -d
+
+            echo "⏳ Waiting for containers to be ready..."
+            sleep 20
+
+            echo "📋 Container status:"
+            docker ps
+
+            echo "🏥 Health check..."
+            curl -sf http://localhost:8000/health && echo "✅ Backend is up" || echo "⚠️ Backend not ready yet"
+
+          ENDSSH
