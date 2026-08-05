@@ -171,7 +171,7 @@ resource "aws_instance" "shopsense_ec2" {
 
   # Root volume — 30GB to accommodate Docker images + Ollama models
   root_block_device {
-    volume_size           = 30
+    volume_size           = 50
     volume_type           = "gp3"
     delete_on_termination = true
   }
