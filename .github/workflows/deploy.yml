@@ -73,8 +73,15 @@ jobs:
             echo "📋 Container status:"
             docker ps
 
+            if docker exec shopsense_ollama ollama list | grep -q "qwen2.5-coder:1.5b"; then
+               echo "Model already exists"
+            else
+               echo "Model not found. Pulling model..."
+               docker exec shopsense_ollama ollama pull qwen2.5-coder:1.5b
+
+
             echo "🏥 Health check..."
-            curl -sf http://localhost:8000/health && echo "✅ Backend is up" || echo "⚠️ Backend not ready yet"
+            curl -sf http://${{ secrets.EC2_HOST }}:8000/health && echo "✅ Backend is up" || echo "⚠️ Backend not ready yet"
 
           ENDSSH
 
