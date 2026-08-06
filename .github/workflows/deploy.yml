@@ -78,6 +78,7 @@ jobs:
             else
                echo "Model not found. Pulling model..."
                docker exec shopsense_ollama ollama pull qwen2.5-coder:1.5b
+            fi
 
 
             echo "🏥 Health check..."
