@@ -2,7 +2,7 @@
 
 An AI-powered customer support platform for ecommerce, built as a Forward Deployed Engineer (FDE) portfolio project.
 
-Customers ask questions about their orders, refunds, and return policies — and get instant, accurate answers from a locally running LLM, grounded in a RAG knowledge base.
+Customers ask questions about their orders, refunds, and return policies - and get instant, accurate answers from a locally running LLM, grounded in a RAG knowledge base.
 
 ---
 
